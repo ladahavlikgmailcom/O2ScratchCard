@@ -18,17 +18,27 @@ struct ScratchView: View {
     // MARK: - Body part
 
     var body: some View {
-        Button {
-            vm.scratch()
-        } label: {
-            Text(vm.scratchTitle)
-                .padding()
-        }
-        .buttonStyle(.borderedProminent)
-        .disabled(vm.isScratched)
-        .navigationTitle("Scratching")
-        .onAppear {
-            vm.onDismiss = { dismiss() }
+        ZStack {
+            Button {
+                vm.scratch()
+            } label: {
+                Text(vm.scratchTitle)
+                    .padding()
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(vm.isScratched)
+            .navigationTitle("Scratching")
+            .onAppear {
+                vm.onDismiss = { dismiss() }
+            }
+            .onDisappear {
+                vm.onDisappear()
+            }
+            if vm.scratching {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .controlSize(.large)
+            }
         }
     }
 }

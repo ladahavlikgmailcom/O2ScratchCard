@@ -19,6 +19,10 @@ class ScratchViewModel {
 
     var onDismiss: (() -> Void)?
 
+    // MARK: - local variables
+
+    var scratching: Bool = false
+
     // MARK: - View data
 
     var scratchTitle: String {
@@ -36,7 +40,34 @@ class ScratchViewModel {
     // MARK: - intents
 
     func scratch() {
-        card.isScratched.toggle()
-        onDismiss?()
+        scratching = true
+        scratchTask?.cancel()
+        scratchTask = Task { [weak self] in
+            await self?.scratchIt()
+        }
+    }
+
+    var scratchTask: Task<Void, Never>?
+
+    func scratchIt() async {
+        do {
+            try await Task.sleep(nanoseconds: 2_000_000_000)
+        } catch { // if cancelled
+            await MainActor.run { [weak self] in
+                self?.scratching = false
+            }
+            return
+        }
+
+        await MainActor.run { [weak self] in
+            guard let self else { return }
+            self.card.isScratched.toggle()
+            self.scratching = false
+            self.onDismiss?()
+        }
+    }
+
+    func onDisappear() {
+        scratchTask?.cancel()
     }
 }
