@@ -47,7 +47,7 @@ class ScratchViewModel {
         }
     }
 
-    var scratchTask: Task<Void, Never>?
+    var scratchTask: Task<Void, Never>? // variable for cancelling it
 
     func scratchIt() async {
         do {

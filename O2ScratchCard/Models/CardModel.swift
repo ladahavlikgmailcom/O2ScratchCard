@@ -21,4 +21,5 @@ class CardModel {
     var code: UUID = UUID()
     var isScratched: Bool = false
     var isActivated: Bool = false
+    var showAlert: Bool = false
 }

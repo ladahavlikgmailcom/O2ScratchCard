@@ -67,5 +67,6 @@ class CardViewModel {
         card.code = UUID()
         card.isActivated = false
         card.isScratched = false
+        card.showAlert = false
     }
 }

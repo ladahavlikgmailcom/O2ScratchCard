@@ -18,17 +18,24 @@ struct ActivationView: View {
     // MARK: - Body part
 
     var body: some View {
-        Button {
-            vm.activate()
-        } label: {
-            Text(vm.activationTitle)
-                .padding()
-        }
-        .buttonStyle(.borderedProminent)
-        .disabled(vm.isActivated)
-        .navigationTitle("Activation")
-        .onAppear {
-            vm.onDismiss = { dismiss() }
+        ZStack {
+            Button {
+                vm.activate()
+            } label: {
+                Text(vm.activationTitle)
+                    .padding()
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(vm.isActivated)
+            .navigationTitle("Activation")
+            .onAppear {
+                vm.onDismiss = { dismiss() }
+            }
+            if vm.activating {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .controlSize(.large)
+            }
         }
     }
 }
