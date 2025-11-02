@@ -3,6 +3,7 @@
 //  O2ScratchCard
 //
 //  Created by [ laďa ] HAVLÍK on 02.11.2025.
+//  Copyright © 2025 ladahavlik.eu. All rights reserved.
 //
 
 import SwiftUI
@@ -11,7 +12,7 @@ import SwiftUI
 struct O2ScratchCardApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CardView()
         }
     }
 }
