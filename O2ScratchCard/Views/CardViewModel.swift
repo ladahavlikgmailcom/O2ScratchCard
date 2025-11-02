@@ -61,6 +61,13 @@ class CardViewModel {
         }
     }
 
+    var showAlert: Binding<Bool> {
+        Binding<Bool>(
+            get: { self.card.showAlert },
+            set: { self.card.showAlert = $0 }
+        )
+    }
+
     // MARK: - Intents
 
     func getCode() {

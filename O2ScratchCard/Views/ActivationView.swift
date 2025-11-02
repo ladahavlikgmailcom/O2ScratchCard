@@ -13,7 +13,7 @@ struct ActivationView: View {
     // MARK: - Local variables
 
     @Environment(\.dismiss) private var dismiss
-    let vm: ActivationViewModel = .init()
+    @Bindable var vm: ActivationViewModel = .init()
 
     // MARK: - Body part
 
@@ -36,6 +36,9 @@ struct ActivationView: View {
                     .progressViewStyle(.circular)
                     .controlSize(.large)
             }
+        }
+        .alert("An error appear in the process. Please try again.", isPresented: vm.showAlert) {
+            Button("OK", role: .cancel) { }
         }
     }
 }

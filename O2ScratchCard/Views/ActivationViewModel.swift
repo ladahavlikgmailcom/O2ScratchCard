@@ -37,6 +37,13 @@ class ActivationViewModel {
         card.isActivated
     }
 
+    var showAlert: Binding<Bool> {
+        Binding<Bool>(
+            get: { self.card.showAlert },
+            set: { self.card.showAlert = $0 }
+        )
+    }
+
     // MARK: - intents
 
     func activate() {
@@ -55,12 +62,16 @@ class ActivationViewModel {
 
         do {
             let apiVersion = try await task.value
-            card.isActivated = apiVersion.iOSVersion > 6.1
-            activating = false
-            onDismiss?()
+            await MainActor.run {
+                self.card.isActivated = apiVersion.iOSVersion > 6.1
+                self.activating = false
+                self.onDismiss?()
+            }
         } catch {
-            card.showAlert = true
-            activating = false
+            await MainActor.run {
+                self.card.showAlert = true
+                self.activating = false
+            }
         }
 
     }

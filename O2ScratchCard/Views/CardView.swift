@@ -26,7 +26,9 @@ struct CardView: View {
             }
             .padding()
             .navigationTitle(vm.navigationTitle)
-
+            .alert("An error appear in the process. Please try again.", isPresented: vm.showAlert) {
+                Button("OK", role: .cancel) { }
+            }
         }
     }
 
