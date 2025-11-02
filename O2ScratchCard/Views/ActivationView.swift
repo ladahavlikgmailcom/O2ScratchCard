@@ -47,6 +47,7 @@ struct ActivationView: View {
 
 #Preview("Deactivated") {
     let _ = CardModel.shared.isActivated = false
+    let _ = CardModel.shared.showAlert = false
     NavigationStack {
         ActivationView()
     }
@@ -54,6 +55,15 @@ struct ActivationView: View {
 
 #Preview("Activated") {
     let _ = CardModel.shared.isActivated = true
+    let _ = CardModel.shared.showAlert = false
+    NavigationStack {
+        ActivationView()
+    }
+}
+
+#Preview("Alert") {
+    let _ = CardModel.shared.isActivated = false
+    let _ = CardModel.shared.showAlert = true
     NavigationStack {
         ActivationView()
     }
