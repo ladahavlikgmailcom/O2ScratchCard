@@ -41,7 +41,7 @@ struct CardView: View {
             .redacted(reason: vm.isScratched ? .invalidated : .placeholder)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(vm.isActivated ? Color.green : Color.red)
+                    .stroke(vm.isActivated ? Color.green : Color.gray)
             )
     }
 
