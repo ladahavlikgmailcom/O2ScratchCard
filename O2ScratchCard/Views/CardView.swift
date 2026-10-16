@@ -12,7 +12,7 @@ struct CardView: View {
 
     // MARK: - Local Variables
 
-    var vm: CardViewModel = .init()
+    @State private var vm = CardViewModel()
 
     // MARK: - Body part
 

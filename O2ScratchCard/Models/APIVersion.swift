@@ -6,9 +6,9 @@
 //  Copyright © 2025 ladahavlik.eu. All rights reserved.
 //
 
-import SwiftUI
+import Foundation
 
-class APIVersion: Decodable {
+nonisolated struct APIVersion: Decodable, Sendable {
     let ios: String
 
     var iOSVersion: Double {

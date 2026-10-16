@@ -13,32 +13,35 @@ struct ScratchView: View {
     // MARK: - Local variables
 
     @Environment(\.dismiss) private var dismiss
-    let vm: ScratchViewModel = .init()
+    @State private var vm = ScratchViewModel()
+    @State private var scratchTask: Task<Void, Never>? // kept for cancelling it
 
     // MARK: - Body part
 
     var body: some View {
         ZStack {
             Button {
-                vm.scratch()
+                scratchTask?.cancel()
+                scratchTask = Task {
+                    if await vm.scratch() {
+                        dismiss()
+                    }
+                }
             } label: {
                 Text(vm.scratchTitle)
                     .padding()
             }
             .buttonStyle(.borderedProminent)
             .disabled(vm.isScratched)
-            .navigationTitle("Scratching")
-            .onAppear {
-                vm.onDismiss = { dismiss() }
-            }
-            .onDisappear {
-                vm.onDisappear()
-            }
             if vm.scratching {
                 ProgressView()
                     .progressViewStyle(.circular)
                     .controlSize(.large)
             }
+        }
+        .navigationTitle("Scratching")
+        .onDisappear {
+            scratchTask?.cancel()
         }
     }
 }

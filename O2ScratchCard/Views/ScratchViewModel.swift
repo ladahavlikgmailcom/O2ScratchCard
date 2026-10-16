@@ -9,15 +9,11 @@
 import SwiftUI
 
 @Observable
-class ScratchViewModel {
+final class ScratchViewModel {
 
     // MARK: - Shared
 
     let card = CardModel.shared
-
-    // MARK: - Routing
-
-    var onDismiss: (() -> Void)?
 
     // MARK: - local variables
 
@@ -39,35 +35,18 @@ class ScratchViewModel {
 
     // MARK: - intents
 
-    func scratch() {
+    /// Scratches the card. Returns `true` when finished, `false` when cancelled.
+    func scratch() async -> Bool {
         scratching = true
-        scratchTask?.cancel()
-        scratchTask = Task { [weak self] in
-            await self?.scratchIt()
-        }
-    }
+        defer { scratching = false }
 
-    var scratchTask: Task<Void, Never>? // variable for cancelling it
-
-    func scratchIt() async {
         do {
-            try await Task.sleep(nanoseconds: 2_000_000_000)
+            try await Task.sleep(for: .seconds(2))
         } catch { // if cancelled
-            await MainActor.run { [weak self] in
-                self?.scratching = false
-            }
-            return
+            return false
         }
 
-        await MainActor.run { [weak self] in
-            guard let self else { return }
-            self.card.isScratched.toggle()
-            self.scratching = false
-            self.onDismiss?()
-        }
-    }
-
-    func onDisappear() {
-        scratchTask?.cancel()
+        card.isScratched.toggle()
+        return true
     }
 }

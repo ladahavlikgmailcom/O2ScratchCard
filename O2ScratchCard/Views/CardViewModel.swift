@@ -9,7 +9,7 @@
 import SwiftUI
 
 @Observable
-class CardViewModel {
+final class CardViewModel {
 
     // MARK: - Shared
 

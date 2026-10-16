@@ -13,30 +13,31 @@ struct ActivationView: View {
     // MARK: - Local variables
 
     @Environment(\.dismiss) private var dismiss
-    @Bindable var vm: ActivationViewModel = .init()
+    @State private var vm = ActivationViewModel()
 
     // MARK: - Body part
 
     var body: some View {
         ZStack {
             Button {
-                vm.activate()
+                Task {
+                    if await vm.activate() {
+                        dismiss()
+                    }
+                }
             } label: {
                 Text(vm.activationTitle)
                     .padding()
             }
             .buttonStyle(.borderedProminent)
             .disabled(vm.isActivated)
-            .navigationTitle("Activation")
-            .onAppear {
-                vm.onDismiss = { dismiss() }
-            }
             if vm.activating {
                 ProgressView()
                     .progressViewStyle(.circular)
                     .controlSize(.large)
             }
         }
+        .navigationTitle("Activation")
         .alert("An error appear in the process. Please try again.", isPresented: vm.showAlert) {
             Button("OK", role: .cancel) { }
         }

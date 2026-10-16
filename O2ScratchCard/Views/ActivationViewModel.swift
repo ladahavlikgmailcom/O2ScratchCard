@@ -9,15 +9,11 @@
 import SwiftUI
 
 @Observable
-class ActivationViewModel {
+final class ActivationViewModel {
 
     // MARK: - Shared
 
     let card = CardModel.shared
-
-    // MARK: - Routing
-
-    var onDismiss: (() -> Void)?
 
     // MARK: - local variables
 
@@ -46,33 +42,20 @@ class ActivationViewModel {
 
     // MARK: - intents
 
-    func activate() {
+    /// Activates the card. Returns `true` when the request succeeded and the view can be dismissed.
+    func activate() async -> Bool {
         activating = true
-        Task { [weak self] in
-            await self?.activateIt()
-        }
-    }
-
-    func activateIt() async {
-        let task = Task {
-            let url = URL(string: "https://api.o2.sk/version")!
-            let (data, _) = try await URLSession.shared.data(from: url)
-            return try JSONDecoder().decode(APIVersion.self, from: data)
-        }
+        defer { activating = false }
 
         do {
-            let apiVersion = try await task.value
-            await MainActor.run {
-                self.card.isActivated = apiVersion.iOSVersion > 6.1
-                self.activating = false
-                self.onDismiss?()
-            }
+            let url = URL(string: "https://api.o2.sk/version")!
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let apiVersion = try JSONDecoder().decode(APIVersion.self, from: data)
+            card.isActivated = apiVersion.iOSVersion > 6.1
+            return true
         } catch {
-            await MainActor.run {
-                self.card.showAlert = true
-                self.activating = false
-            }
+            card.showAlert = true
+            return false
         }
-
     }
 }

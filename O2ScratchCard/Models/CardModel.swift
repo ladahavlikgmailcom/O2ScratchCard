@@ -6,10 +6,11 @@
 //  Copyright © 2025 ladahavlik.eu. All rights reserved.
 //
 
-import SwiftUI
+import Foundation
+import Observation
 
 @Observable
-class CardModel {
+final class CardModel {
     // MARK: - singleton
     static let shared: CardModel = CardModel()
 
